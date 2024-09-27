@@ -54,18 +54,14 @@ public:
    */
   Range(Kokkos::Array<std::size_t, rank> begin,
         Kokkos::Array<std::size_t, rank> end)
-      : mBegin(begin), mEnd(end) {
-    static_assert(rank > 1);
-  }
+      : mBegin(begin), mEnd(end) {}
 
   /**
    * Single-dimensional constructor.
    * @param begin Begin index.
    * @param end End index.
    */
-  Range(std::size_t begin, std::size_t end) : mBegin({begin}), mEnd({end}) {
-    static_assert(rank == 1);
-  }
+  Range(std::size_t begin, std::size_t end) : mBegin({begin}), mEnd({end}) {}
 
   /**
    * Getter for the array containing begin coordinates.
@@ -114,17 +110,14 @@ public:
    * @tparam rank Rank of the tile.
    * @param tile Array of tile. Must have the same rank as `rank`.
    */
-  Tiling(Kokkos::Array<std::size_t, rank> tile) : mTile(tile) {
-    static_assert(rank > 1);
-  }
+  Tiling(Kokkos::Array<std::size_t, rank> tile) : mTile(tile) {}
 
   /**
    * Single-dimensional constructor.
+   * It is considered that a one-dimensional tile is a chunk.
    * @param chunk_size Chunk size.
    */
-  Tiling(std::size_t chunk_size) : mTile({chunk_size}) {
-    static_assert(rank == 1);
-  }
+  Tiling(std::size_t chunk_size) : mTile({chunk_size}) {}
 
   /**
    * Getter for the tile.
