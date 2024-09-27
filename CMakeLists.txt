@@ -19,3 +19,7 @@ if(POLK_ENABLE_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
+
+if(POLK_ENABLE_EXAMPLES)
+    add_subdirectory(examples)
+endif()

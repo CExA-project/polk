@@ -204,7 +204,7 @@ public:
    * @return New execution policy creator.
    * @warning This parameter cannot be set twice.
    */
-  template <RangeType RangeIn> auto with(RangeIn const &r) {
+  template <RangeType RangeIn> auto with(RangeIn const &r) const {
     static_assert(std::is_same_v<Range, UnknownRange>, "Range already set");
     if constexpr (!std::is_same_v<Tiling, UnknownTiling>) {
       static_assert(Tiling::getRank() == RangeIn::getRank(),
@@ -224,7 +224,7 @@ public:
    * @return New execution policy creator.
    * @warning This parameter cannot be set twice.
    */
-  template <TilingType TilingIn> auto with(TilingIn const &t) {
+  template <TilingType TilingIn> auto with(TilingIn const &t) const {
     static_assert(std::is_same_v<Tiling, UnknownTiling>, "Tiling already set");
     if constexpr (!std::is_same_v<Range, UnknownRange>) {
       static_assert(Range::getRank() == TilingIn::getRank(),
@@ -243,7 +243,7 @@ public:
    * @warning This parameter cannot be set twice.
    */
   template <kokkos_addendum::SpaceType ExecutionSpaceIn>
-  auto with(ExecutionSpaceIn const &es) {
+  auto with(ExecutionSpaceIn const &es) const {
     static_assert(std::is_same_v<ExecutionSpace, UnknownExecutionSpace>,
                   "Execution space already set");
 
