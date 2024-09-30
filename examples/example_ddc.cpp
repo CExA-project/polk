@@ -16,7 +16,7 @@ template <typename... Dim> class Domain {
 public:
   Domain(Kokkos::Array<std::size_t, sizeof...(Dim)> const &begin,
          Kokkos::Array<std::size_t, sizeof...(Dim)> const &end)
-      : mDimensions(std::make_pair(begin, end)) {}
+      : mDimensions(begin, end) {}
 
   auto begin() const { return mDimensions.first; }
 
@@ -32,7 +32,7 @@ void parallel_for_each(std::string const &label,
   Kokkos::parallel_for(
       label,
       policyCreator
-          .with(polk::Range<domain.getRank()>(domain.begin(), domain.end()))
+          .with(polk::Range<Domain::getRank()>(domain.begin(), domain.end()))
           .getPolicy(),
       kernel);
 }
