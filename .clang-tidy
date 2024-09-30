@@ -1,0 +1,5 @@
+Checks: '-*,modernize-type-traits,modernize-use-using,modernize-use-nullptr,cppcoreguidelines-pro-type-cstyle-cast,modernize-use-designated-initializers,modernize-use-emplace'
+FormatStyle: file
+HeaderFileExtensions: ['h','hh','hpp','hxx']
+ImplementationFileExtensions: ['c','cc','cpp','cxx']
+ExcludeHeaderFilterRegex: 'build.*\.hpp'
