@@ -14,6 +14,32 @@ TEST(test_range, test_create) {
   ASSERT_EQ(myRange.getEnd()[1], 1);
 }
 
+TEST(test_range, test_create_array) {
+    Kokkos::Array<std::size_t, 2> begin {0, 0}, end {1, 1};
+  auto myRange = polk::Range<2>(begin, end);
+
+  static_assert(myRange.getRank() == 2);
+
+  ASSERT_EQ(myRange.getBegin()[0], 0);
+  ASSERT_EQ(myRange.getBegin()[1], 0);
+  ASSERT_EQ(myRange.getEnd()[0], 1);
+  ASSERT_EQ(myRange.getEnd()[1], 1);
+}
+
+TEST(test_range, test_create_array_move) {
+  auto myRange = polk::Range<2>(
+              Kokkos::Array<std::size_t, 2>{0, 0},
+              Kokkos::Array<std::size_t, 2>{1, 1}
+          );
+
+  static_assert(myRange.getRank() == 2);
+
+  ASSERT_EQ(myRange.getBegin()[0], 0);
+  ASSERT_EQ(myRange.getBegin()[1], 0);
+  ASSERT_EQ(myRange.getEnd()[0], 1);
+  ASSERT_EQ(myRange.getEnd()[1], 1);
+}
+
 TEST(test_tiling, test_create) {
   auto myTiling = polk::Tiling<2>({10, 10});
 
