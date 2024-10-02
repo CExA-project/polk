@@ -68,5 +68,5 @@ int main() {
   dynk::setModified(data, isExecutedOnDevice);
 
   data.template sync<Kokkos::DefaultHostExecutionSpace>();
-  Kokkos::printf("Value at 50, 50: %i\n", data.h_view(50, 50));
+  Kokkos::printf("Value at 50, 50: %i (should be 100)\n", data.h_view(50, 50));
 }

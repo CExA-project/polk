@@ -56,5 +56,5 @@ int main() {
         data(i, j) = i + j;
       });
 
-  Kokkos::printf("Value at 50, 50: %i\n", data(50, 50));
+  Kokkos::printf("Value at 50, 50: %i (should be 100)\n", data(50, 50));
 }
