@@ -303,20 +303,18 @@ public:
     if constexpr (getRank() > 1) {
       if constexpr (std::is_same_v<ExecutionSpace, UnknownExecutionSpace>) {
         if constexpr (std::is_same_v<Tiling, UnknownTiling>) {
-          return Kokkos::MDRangePolicy<Kokkos::Rank<getRank()>>(
-              mRange.getBegin(), mRange.getEnd());
+          return Kokkos::MDRangePolicy(mRange.getBegin(), mRange.getEnd());
         } else {
-          return Kokkos::MDRangePolicy<Kokkos::Rank<getRank()>>(
-              mRange.getBegin(), mRange.getEnd(), mTiling.getTile());
+          return Kokkos::MDRangePolicy(mRange.getBegin(), mRange.getEnd(),
+                                       mTiling.getTile());
         }
       } else {
         if constexpr (std::is_same_v<Tiling, UnknownTiling>) {
-          return Kokkos::MDRangePolicy<Kokkos::Rank<getRank()>>(
-              mExecutionSpace, mRange.getBegin(), mRange.getEnd());
+          return Kokkos::MDRangePolicy(mExecutionSpace, mRange.getBegin(),
+                                       mRange.getEnd());
         } else {
-          return Kokkos::MDRangePolicy<Kokkos::Rank<getRank()>>(
-              mExecutionSpace, mRange.getBegin(), mRange.getEnd(),
-              mTiling.getTile());
+          return Kokkos::MDRangePolicy(mExecutionSpace, mRange.getBegin(),
+                                       mRange.getEnd(), mTiling.getTile());
         }
       }
     } else {

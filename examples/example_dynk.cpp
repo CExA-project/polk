@@ -14,10 +14,10 @@ void parallel_for(bool const isExecutedOnDevice, std::string const &label,
                   ExecutionPolicyCreator const &policyCreator,
                   Kernel const &kernel) {
   Kokkos::fence("begin dynamic parallel for");
-  if (isExecutedOnDevice)
+  if (isExecutedOnDevice) {
     Kokkos::parallel_for(
         label, policyCreator.with(DeviceExecutionSpace()).getPolicy(), kernel);
-  else {
+  } else {
     Kokkos::parallel_for(
         label, policyCreator.with(HostExecutionSpace()).getPolicy(), kernel);
   }
