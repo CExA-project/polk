@@ -3,23 +3,8 @@
 
 #include <Kokkos_Core.hpp>
 
-/**
- * Additions to Kokkos objects.
- */
-namespace kokkos_addendum {
+#include "kokkos_concepts.hpp"
 
-/**
- * Space trait value.
- */
-template <typename T> bool constexpr is_space_v = Kokkos::is_space<T>::value;
-
-/**
- * Space concept.
- */
-template <typename T>
-concept SpaceType = is_space_v<T>;
-
-} // namespace kokkos_addendum
 
 /**
  * Polk objects.
