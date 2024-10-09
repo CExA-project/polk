@@ -48,7 +48,7 @@ TEST(test_tiling, test_create) {
 }
 
 TEST(test_execution_policy_creator, test_default) {
-  auto myPolicyCreator = polk::ExecutionPolicyCreator();
+  [[maybe_unused]] auto myPolicyCreator = polk::ExecutionPolicyCreator();
 
   static_assert(myPolicyCreator.getRank() == polk::unknownRank);
   static_assert(
