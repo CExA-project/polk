@@ -1,6 +1,7 @@
 add_executable(
     benchmark-range
     benchmark_range.cpp
+    main.cpp
 )
 
 target_link_libraries(
@@ -12,6 +13,7 @@ target_link_libraries(
 add_executable(
     benchmark-mdrange
     benchmark_mdrange.cpp
+    main.cpp
 )
 
 target_link_libraries(
