@@ -9,3 +9,6 @@ option(POLK_ENABLE_EXAMPLES "Build examples of the library")
 
 # benchmarks
 option(POLK_ENABLE_BENCHMARKS "Build benchmarks for the library")
+
+# compile benchmarks
+option(POLK_ENABLE_COMPILE_BENCHMARKS "Build compile benchmarks of the library")

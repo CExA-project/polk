@@ -27,3 +27,7 @@ endif()
 if(POLK_ENABLE_BENCHMARKS)
     add_subdirectory(benchmarks)
 endif()
+
+if(POLK_ENABLE_COMPILE_BENCHMARKS)
+    add_subdirectory(compile_benchmarks)
+endif()
