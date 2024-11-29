@@ -50,48 +50,49 @@ TEST(test_tiling, test_create) {
 TEST(test_execution_policy_creator, test_default) {
   [[maybe_unused]] auto myPolicyCreator = polk::ExecutionPolicyCreator();
 
-  static_assert(myPolicyCreator.getRank() == polk::unknownRank);
-  static_assert(
-      std::is_same_v<decltype(myPolicyCreator.getRange()), polk::UnknownRange>);
-  static_assert(std::is_same_v<decltype(myPolicyCreator.getExecutionSpace()),
-                               polk::UnknownExecutionSpace>);
+  static_assert(!myPolicyCreator.hasRank());
+  static_assert(!myPolicyCreator.hasRange());
+  static_assert(!myPolicyCreator.hasTiling());
+  static_assert(!myPolicyCreator.hasExecutionSpace());
 }
 
 TEST(test_execution_policy_creator, test_with_range) {
   auto myRange = polk::Range<2>({0, 0}, {1, 1});
   auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myRange);
 
+  static_assert(myPolicyCreator.hasRank());
+  static_assert(myPolicyCreator.hasRange());
+  static_assert(!myPolicyCreator.hasTiling());
+  static_assert(!myPolicyCreator.hasExecutionSpace());
+
   static_assert(myPolicyCreator.getRank() == 2);
   static_assert(
       std::is_same_v<decltype(myPolicyCreator.getRange()), decltype(myRange)>);
-  static_assert(std::is_same_v<decltype(myPolicyCreator.getTiling()),
-                               polk::UnknownTiling>);
-  static_assert(std::is_same_v<decltype(myPolicyCreator.getExecutionSpace()),
-                               polk::UnknownExecutionSpace>);
 }
 
 TEST(test_execution_policy_creator, test_with_tiling) {
   auto myTiling = polk::Tiling<2>({10, 10});
   auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myTiling);
 
+  static_assert(myPolicyCreator.hasRank());
+  static_assert(!myPolicyCreator.hasRange());
+  static_assert(myPolicyCreator.hasTiling());
+  static_assert(!myPolicyCreator.hasExecutionSpace());
+
   static_assert(myPolicyCreator.getRank() == 2);
-  static_assert(
-      std::is_same_v<decltype(myPolicyCreator.getRange()), polk::UnknownRange>);
   static_assert(std::is_same_v<decltype(myPolicyCreator.getTiling()),
                                decltype(myTiling)>);
-  static_assert(std::is_same_v<decltype(myPolicyCreator.getExecutionSpace()),
-                               polk::UnknownExecutionSpace>);
 }
 
 TEST(test_execution_policy_creator, test_with_space) {
   auto myExecutionSpace = Kokkos::DefaultExecutionSpace();
   auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myExecutionSpace);
 
-  static_assert(myPolicyCreator.getRank() == polk::unknownRank);
-  static_assert(
-      std::is_same_v<decltype(myPolicyCreator.getRange()), polk::UnknownRange>);
-  static_assert(std::is_same_v<decltype(myPolicyCreator.getTiling()),
-                               polk::UnknownTiling>);
+  static_assert(!myPolicyCreator.hasRank());
+  static_assert(!myPolicyCreator.hasRange());
+  static_assert(!myPolicyCreator.hasTiling());
+  static_assert(myPolicyCreator.hasExecutionSpace());
+
   static_assert(std::is_same_v<decltype(myPolicyCreator.getExecutionSpace()),
                                Kokkos::DefaultExecutionSpace>);
 }

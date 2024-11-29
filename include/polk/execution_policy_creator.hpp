@@ -273,6 +273,36 @@ public:
   ExecutionSpace constexpr getExecutionSpace() const { return mExecutionSpace; }
 
   /**
+   * Check if rank is specified.
+   * @return True if rank is not `unknownRank`.
+   */
+  static bool constexpr hasRank() { return getRank() != unknownRank; }
+
+  /**
+   * Check if range is specified.
+   * @return True if range is not `UnknownRange`.
+   */
+  static bool constexpr hasRange() {
+    return !std::is_same_v<Range, UnknownRange>;
+  }
+
+  /**
+   * Check if tiling is specified.
+   * @return True if tiling is not `UnknownTiling`.
+   */
+  static bool constexpr hasTiling() {
+    return !std::is_same_v<Tiling, UnknownTiling>;
+  }
+
+  /**
+   * Check if execution space is specified.
+   * @return True if execution space is not `UnknownExecutionSpace`.
+   */
+  static bool constexpr hasExecutionSpace() {
+    return !std::is_same_v<ExecutionSpace, UnknownExecutionSpace>;
+  }
+
+  /**
    * Retrieve a Kokkos execution policy.
    * @return Kokkos execution policy. May be a `Kokkos::RangePolicy` for
    * single-dimensional range and tile, or a `Kokkos::MDRangePolicy` for
@@ -282,8 +312,8 @@ public:
    */
   auto constexpr getPolicy() const {
     // parameters that must be set
-    static_assert(!std::is_same_v<Range, UnknownRange>, "No range set");
-    static_assert(getRank() != unknownRank, "No rank set");
+    static_assert(hasRank(), "No rank set");
+    static_assert(hasRange(), "No range set");
 
     if constexpr (getRank() > 1) {
       if constexpr (std::is_same_v<ExecutionSpace, UnknownExecutionSpace>) {
