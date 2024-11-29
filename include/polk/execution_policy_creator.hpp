@@ -5,7 +5,6 @@
 
 #include "kokkos_concepts.hpp"
 
-
 /**
  * Polk objects.
  */
@@ -37,8 +36,8 @@ public:
    * `rank`.
    * @param end Array of end coordinates. Must have the same rank as `rank`.
    */
-  Range(Kokkos::Array<std::size_t, rank> begin,
-        Kokkos::Array<std::size_t, rank> end)
+  constexpr Range(Kokkos::Array<std::size_t, rank> begin,
+                  Kokkos::Array<std::size_t, rank> end)
       : mBegin(begin), mEnd(end) {}
 
   /**
@@ -46,19 +45,20 @@ public:
    * @param begin Begin index.
    * @param end End index.
    */
-  Range(std::size_t begin, std::size_t end) : mBegin({begin}), mEnd({end}) {}
+  constexpr Range(std::size_t begin, std::size_t end)
+      : mBegin({begin}), mEnd({end}) {}
 
   /**
    * Getter for the array containing begin coordinates.
    * @return Array of coordinates.
    */
-  auto getBegin() const { return mBegin; }
+  auto constexpr getBegin() const { return mBegin; }
 
   /**
    * Getter for the array containing end coordinates.
    * @return Array of coordinates.
    */
-  auto getEnd() const { return mEnd; }
+  auto constexpr getEnd() const { return mEnd; }
 
   /**
    * Getter for the rank.
@@ -95,20 +95,20 @@ public:
    * @tparam rank Rank of the tile.
    * @param tile Array of tile. Must have the same rank as `rank`.
    */
-  Tiling(Kokkos::Array<std::size_t, rank> tile) : mTile(tile) {}
+  constexpr Tiling(Kokkos::Array<std::size_t, rank> tile) : mTile(tile) {}
 
   /**
    * Single-dimensional constructor.
    * It is considered that a one-dimensional tile is a chunk.
    * @param chunk_size Chunk size.
    */
-  Tiling(std::size_t chunk_size) : mTile({chunk_size}) {}
+  constexpr Tiling(std::size_t chunk_size) : mTile({chunk_size}) {}
 
   /**
    * Getter for the tile.
    * @return Array of tile.
    */
-  auto getTile() const { return mTile; }
+  auto constexpr getTile() const { return mTile; }
 
   /**
    * Getter for the rank.
@@ -164,7 +164,7 @@ public:
    * Default constructor.
    * @note This is the preferred constructor for this class.
    */
-  ExecutionPolicyCreator() = default;
+  constexpr ExecutionPolicyCreator() = default;
 
   /**
    * Full constructor.
@@ -176,8 +176,8 @@ public:
    * @param es Execution space parameter.
    * @note The user should prefer to use the default constructor.
    */
-  ExecutionPolicyCreator(Range const &r, Tiling const &t,
-                         ExecutionSpace const &es)
+  constexpr ExecutionPolicyCreator(Range const &r, Tiling const &t,
+                                   ExecutionSpace const &es)
       : mRange(r), mTiling(t), mExecutionSpace(es) {}
 
   /**
@@ -189,7 +189,7 @@ public:
    * @return New execution policy creator.
    * @warning This parameter cannot be set twice.
    */
-  template <RangeType RangeIn> auto with(RangeIn const &r) const {
+  template <RangeType RangeIn> auto constexpr with(RangeIn const &r) const {
     static_assert(std::is_same_v<Range, UnknownRange>, "Range already set");
     if constexpr (!std::is_same_v<Tiling, UnknownTiling>) {
       static_assert(Tiling::getRank() == RangeIn::getRank(),
@@ -209,7 +209,7 @@ public:
    * @return New execution policy creator.
    * @warning This parameter cannot be set twice.
    */
-  template <TilingType TilingIn> auto with(TilingIn const &t) const {
+  template <TilingType TilingIn> auto constexpr with(TilingIn const &t) const {
     static_assert(std::is_same_v<Tiling, UnknownTiling>, "Tiling already set");
     if constexpr (!std::is_same_v<Range, UnknownRange>) {
       static_assert(Range::getRank() == TilingIn::getRank(),
@@ -228,7 +228,7 @@ public:
    * @warning This parameter cannot be set twice.
    */
   template <kokkos_addendum::SpaceType ExecutionSpaceIn>
-  auto with(ExecutionSpaceIn const &es) const {
+  auto constexpr with(ExecutionSpaceIn const &es) const {
     static_assert(std::is_same_v<ExecutionSpace, UnknownExecutionSpace>,
                   "Execution space already set");
 
@@ -258,19 +258,19 @@ public:
    * Getter for the range.
    * @return Range parameter.
    */
-  Range getRange() const { return mRange; }
+  Range constexpr getRange() const { return mRange; }
 
   /**
    * Getter for the tile.
    * @return Tile parameter.
    */
-  Tiling getTiling() const { return mTiling; }
+  Tiling constexpr getTiling() const { return mTiling; }
 
   /**
    * Getter for the execution space.
    * @return Execution space parameter.
    */
-  ExecutionSpace getExecutionSpace() const { return mExecutionSpace; }
+  ExecutionSpace constexpr getExecutionSpace() const { return mExecutionSpace; }
 
   /**
    * Retrieve a Kokkos execution policy.
@@ -280,7 +280,7 @@ public:
    * @warning The range (and the rank) must have been set before calling this
    * method.
    */
-  auto getPolicy() const {
+  auto constexpr getPolicy() const {
     // parameters that must be set
     static_assert(!std::is_same_v<Range, UnknownRange>, "No range set");
     static_assert(getRank() != unknownRank, "No rank set");
