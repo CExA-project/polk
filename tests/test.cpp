@@ -48,59 +48,61 @@ TEST(test_tiling, test_create) {
 }
 
 TEST(test_execution_policy_creator, test_default) {
-  [[maybe_unused]] auto myPolicyCreator = polk::ExecutionPolicyCreator();
+  [[maybe_unused]] auto myExecutionParameters = polk::ExecutionParameters();
 
-  static_assert(!myPolicyCreator.hasRank());
-  static_assert(!myPolicyCreator.hasRange());
-  static_assert(!myPolicyCreator.hasTiling());
-  static_assert(!myPolicyCreator.hasExecutionSpace());
+  static_assert(!myExecutionParameters.hasRank());
+  static_assert(!myExecutionParameters.hasRange());
+  static_assert(!myExecutionParameters.hasTiling());
+  static_assert(!myExecutionParameters.hasExecutionSpace());
 }
 
 TEST(test_execution_policy_creator, test_with_range) {
   auto myRange = polk::Range<2>({0, 0}, {1, 1});
-  auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myRange);
+  auto myExecutionParameters = polk::ExecutionParameters().with(myRange);
 
-  static_assert(myPolicyCreator.hasRank());
-  static_assert(myPolicyCreator.hasRange());
-  static_assert(!myPolicyCreator.hasTiling());
-  static_assert(!myPolicyCreator.hasExecutionSpace());
+  static_assert(myExecutionParameters.hasRank());
+  static_assert(myExecutionParameters.hasRange());
+  static_assert(!myExecutionParameters.hasTiling());
+  static_assert(!myExecutionParameters.hasExecutionSpace());
 
-  static_assert(myPolicyCreator.getRank() == 2);
-  static_assert(
-      std::is_same_v<decltype(myPolicyCreator.getRange()), decltype(myRange)>);
+  static_assert(myExecutionParameters.getRank() == 2);
+  static_assert(std::is_same_v<decltype(myExecutionParameters.getRange()),
+                               decltype(myRange)>);
 }
 
 TEST(test_execution_policy_creator, test_with_tiling) {
   auto myTiling = polk::Tiling<2>({10, 10});
-  auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myTiling);
+  auto myExecutionParameters = polk::ExecutionParameters().with(myTiling);
 
-  static_assert(myPolicyCreator.hasRank());
-  static_assert(!myPolicyCreator.hasRange());
-  static_assert(myPolicyCreator.hasTiling());
-  static_assert(!myPolicyCreator.hasExecutionSpace());
+  static_assert(myExecutionParameters.hasRank());
+  static_assert(!myExecutionParameters.hasRange());
+  static_assert(myExecutionParameters.hasTiling());
+  static_assert(!myExecutionParameters.hasExecutionSpace());
 
-  static_assert(myPolicyCreator.getRank() == 2);
-  static_assert(std::is_same_v<decltype(myPolicyCreator.getTiling()),
+  static_assert(myExecutionParameters.getRank() == 2);
+  static_assert(std::is_same_v<decltype(myExecutionParameters.getTiling()),
                                decltype(myTiling)>);
 }
 
 TEST(test_execution_policy_creator, test_with_space) {
   auto myExecutionSpace = Kokkos::DefaultExecutionSpace();
-  auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myExecutionSpace);
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myExecutionSpace);
 
-  static_assert(!myPolicyCreator.hasRank());
-  static_assert(!myPolicyCreator.hasRange());
-  static_assert(!myPolicyCreator.hasTiling());
-  static_assert(myPolicyCreator.hasExecutionSpace());
+  static_assert(!myExecutionParameters.hasRank());
+  static_assert(!myExecutionParameters.hasRange());
+  static_assert(!myExecutionParameters.hasTiling());
+  static_assert(myExecutionParameters.hasExecutionSpace());
 
-  static_assert(std::is_same_v<decltype(myPolicyCreator.getExecutionSpace()),
-                               Kokkos::DefaultExecutionSpace>);
+  static_assert(
+      std::is_same_v<decltype(myExecutionParameters.getExecutionSpace()),
+                     Kokkos::DefaultExecutionSpace>);
 }
 
 TEST(test_execution_policy_creator, test_get_policy_mdrangepolicy) {
   auto myRange = polk::Range<2>({0, 0}, {1, 1});
-  auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myRange);
-  auto policy = myPolicyCreator.getPolicy();
+  auto myExecutionParameters = polk::ExecutionParameters().with(myRange);
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
   static_assert(policy.rank == 2);
@@ -114,9 +116,9 @@ TEST(test_execution_policy_creator, test_get_policy_mdrangepolicy) {
 TEST(test_execution_policy_creator, test_get_policy_mdrangepolicy_tiling) {
   auto myRange = polk::Range<2>({0, 0}, {100, 100});
   auto myTiling = polk::Tiling<2>({10, 10});
-  auto myPolicyCreator =
-      polk::ExecutionPolicyCreator().with(myRange).with(myTiling);
-  auto policy = myPolicyCreator.getPolicy();
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myRange).with(myTiling);
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
   static_assert(policy.rank == 2);
@@ -132,9 +134,9 @@ TEST(test_execution_policy_creator, test_get_policy_mdrangepolicy_tiling) {
 TEST(test_execution_policy_creator, test_get_policy_mdrangepolicy_space) {
   auto myRange = polk::Range<2>({0, 0}, {1, 1});
   auto myExecutionSpace = Kokkos::DefaultExecutionSpace();
-  auto myPolicyCreator =
-      polk::ExecutionPolicyCreator().with(myRange).with(myExecutionSpace);
-  auto policy = myPolicyCreator.getPolicy();
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myRange).with(myExecutionSpace);
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
   static_assert(policy.rank == 2);
@@ -153,9 +155,9 @@ TEST(test_execution_policy_creator, test_get_policy_mdrangepolicy_space) {
 TEST(test_execution_policy_creator, test_get_policy_mdrangepolicy_space_host) {
   auto myRange = polk::Range<2>({0, 0}, {1, 1});
   auto myExecutionSpace = Kokkos::DefaultHostExecutionSpace();
-  auto myPolicyCreator =
-      polk::ExecutionPolicyCreator().with(myRange).with(myExecutionSpace);
-  auto policy = myPolicyCreator.getPolicy();
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myRange).with(myExecutionSpace);
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
   static_assert(policy.rank == 2);
@@ -176,10 +178,10 @@ TEST(test_execution_policy_creator,
   auto myRange = polk::Range<2>({0, 0}, {100, 100});
   auto myTiling = polk::Tiling<2>({10, 10});
   auto myExecutionSpace = Kokkos::DefaultExecutionSpace();
-  auto myPolicyCreator =
-      polk::ExecutionPolicyCreator().with(myRange).with(myTiling).with(
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myRange).with(myTiling).with(
           myExecutionSpace);
-  auto policy = myPolicyCreator.getPolicy();
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
   static_assert(policy.rank == 2);
@@ -199,8 +201,8 @@ TEST(test_execution_policy_creator,
 
 TEST(test_execution_policy_creator, test_get_policy_rangepolicy) {
   auto myRange = polk::Range(0, 1);
-  auto myPolicyCreator = polk::ExecutionPolicyCreator().with(myRange);
-  auto policy = myPolicyCreator.getPolicy();
+  auto myExecutionParameters = polk::ExecutionParameters().with(myRange);
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
 
@@ -211,9 +213,9 @@ TEST(test_execution_policy_creator, test_get_policy_rangepolicy) {
 TEST(test_execution_policy_creator, test_get_policy_rangepolicy_tiling) {
   auto myRange = polk::Range(0, 100);
   auto myTiling = polk::Tiling(10);
-  auto myPolicyCreator =
-      polk::ExecutionPolicyCreator().with(myRange).with(myTiling);
-  auto policy = myPolicyCreator.getPolicy();
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myRange).with(myTiling);
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
 
@@ -225,9 +227,9 @@ TEST(test_execution_policy_creator, test_get_policy_rangepolicy_tiling) {
 TEST(test_execution_policy_creator, test_get_policy_rangepolicy_space) {
   auto myRange = polk::Range(0, 1);
   auto myExecutionSpace = Kokkos::DefaultExecutionSpace();
-  auto myPolicyCreator =
-      polk::ExecutionPolicyCreator().with(myRange).with(myExecutionSpace);
-  auto policy = myPolicyCreator.getPolicy();
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myRange).with(myExecutionSpace);
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
   static_assert(
@@ -244,10 +246,10 @@ TEST(test_execution_policy_creator, test_get_policy_rangepolicy_tiling_space) {
   auto myRange = polk::Range(0, 100);
   auto myTiling = polk::Tiling(10);
   auto myExecutionSpace = Kokkos::DefaultExecutionSpace();
-  auto myPolicyCreator =
-      polk::ExecutionPolicyCreator().with(myRange).with(myTiling).with(
+  auto myExecutionParameters =
+      polk::ExecutionParameters().with(myRange).with(myTiling).with(
           myExecutionSpace);
-  auto policy = myPolicyCreator.getPolicy();
+  auto policy = myExecutionParameters.getPolicy();
 
   static_assert(Kokkos::is_execution_policy<decltype(policy)>::value);
   static_assert(
@@ -271,7 +273,7 @@ struct DummyKernel2D {
 };
 
 TEST(test_execution_policy_creator_integration, test_mdrangepolicy_space) {
-  auto policy = polk::ExecutionPolicyCreator()
+  auto policy = polk::ExecutionParameters()
                     .with(polk::Range<2>({0, 0}, {100, 100}))
                     .with(Kokkos::DefaultExecutionSpace())
                     .getPolicy();
@@ -300,7 +302,7 @@ TEST(test_execution_policy_creator_integration, test_mdrangepolicy_space_tmp) {
   auto dataMirror = Kokkos::create_mirror_view(data);
 
   Kokkos::parallel_for("aaa",
-                       polk::ExecutionPolicyCreator()
+                       polk::ExecutionParameters()
                            .with(polk::Range<2>({0, 0}, {100, 100}))
                            .with(Kokkos::DefaultExecutionSpace())
                            .getPolicy(),

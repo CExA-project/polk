@@ -25,9 +25,9 @@ public:
   static std::size_t constexpr getRank() { return mRank; }
 };
 
-template <typename ExecutionPolicyCreator, typename Domain, typename Kernel>
+template <typename ExecutionParameters, typename Domain, typename Kernel>
 void parallel_for_each(std::string const &label,
-                       ExecutionPolicyCreator const &policyCreator,
+                       ExecutionParameters const &policyCreator,
                        Domain const &domain, Kernel const &kernel) {
   Kokkos::parallel_for(
       label,
@@ -51,7 +51,7 @@ int main() {
 
   ddc::parallel_for_each(
       "perform computation",
-      polk::ExecutionPolicyCreator().with(Kokkos::DefaultHostExecutionSpace()),
+      polk::ExecutionParameters().with(Kokkos::DefaultHostExecutionSpace()),
       domain, KOKKOS_LAMBDA(std::size_t const i, std::size_t const j) {
         data(i, j) = i + j;
       });

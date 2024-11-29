@@ -3,7 +3,7 @@
 #include "polk/execution_policy_creator.hpp"
 
 int main() {
-  [[maybe_unused]] auto policy = polk::ExecutionPolicyCreator()
+  [[maybe_unused]] auto policy = polk::ExecutionParameters()
                                      .with(Kokkos::DefaultExecutionSpace{})
                                      .with(polk::Range(0, 100))
                                      .with(polk::Tiling(10))

@@ -7,11 +7,11 @@
 
 namespace dynk {
 
-template <typename ExecutionPolicyCreator, typename Kernel,
+template <typename ExecutionParameters, typename Kernel,
           typename DeviceExecutionSpace = Kokkos::DefaultExecutionSpace,
           typename HostExecutionSpace = Kokkos::DefaultHostExecutionSpace>
 void parallel_for(bool const isExecutedOnDevice, std::string const &label,
-                  ExecutionPolicyCreator const &policyCreator,
+                  ExecutionParameters const &policyCreator,
                   Kernel const &kernel) {
   Kokkos::fence("begin dynamic parallel for");
   if (isExecutedOnDevice) {
@@ -61,7 +61,7 @@ int main() {
   auto dataV = dynk::getViewAnonymous(data, isExecutedOnDevice);
   dynk::parallel_for(
       isExecutedOnDevice, "perform computation",
-      polk::ExecutionPolicyCreator().with(polk::Range<2>({0, 0}, {100, 100})),
+      polk::ExecutionParameters().with(polk::Range<2>({0, 0}, {100, 100})),
       KOKKOS_LAMBDA(std::size_t const i, std::size_t const j) {
         dataV(i, j) = i + j;
       });

@@ -6,7 +6,7 @@
 void benchmarkCreatePolkPolicy(benchmark::State &state) {
   while (state.KeepRunning()) {
     [[maybe_unused]] auto policy =
-        polk::ExecutionPolicyCreator()
+        polk::ExecutionParameters()
             .with(Kokkos::DefaultExecutionSpace{})
             .with(polk::Range<3>({0, 0, 0}, {100, 100, 100}))
             .with(polk::Tiling<3>({10, 10, 10}))

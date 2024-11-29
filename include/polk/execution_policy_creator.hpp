@@ -148,7 +148,7 @@ int constexpr unknownRank = 0;
  */
 template <typename Range = UnknownRange, typename Tiling = UnknownTiling,
           typename ExecutionSpace = UnknownExecutionSpace>
-class ExecutionPolicyCreator {
+class ExecutionParameters {
   Range mRange;
   Tiling mTiling;
   ExecutionSpace mExecutionSpace;
@@ -157,14 +157,13 @@ public:
   /**
    * Marker to identify the class as an execution policy creator.
    */
-  using ExecutionPolicyCreatorType =
-      ExecutionPolicyCreator<Range, ExecutionSpace>;
+  using ExecutionParametersType = ExecutionParameters<Range, ExecutionSpace>;
 
   /**
    * Default constructor.
    * @note This is the preferred constructor for this class.
    */
-  constexpr ExecutionPolicyCreator() = default;
+  constexpr ExecutionParameters() = default;
 
   /**
    * Full constructor.
@@ -176,8 +175,8 @@ public:
    * @param es Execution space parameter.
    * @note The user should prefer to use the default constructor.
    */
-  constexpr ExecutionPolicyCreator(Range const &r, Tiling const &t,
-                                   ExecutionSpace const &es)
+  constexpr ExecutionParameters(Range const &r, Tiling const &t,
+                                ExecutionSpace const &es)
       : mRange(r), mTiling(t), mExecutionSpace(es) {}
 
   /**
@@ -196,7 +195,7 @@ public:
                     "Range rank and tiling rank missmatch");
     }
 
-    return ExecutionPolicyCreator<RangeIn, Tiling, ExecutionSpace>(
+    return ExecutionParameters<RangeIn, Tiling, ExecutionSpace>(
         r, mTiling, mExecutionSpace);
   }
 
@@ -216,7 +215,7 @@ public:
                     "Range rank and tiling rank missmatch");
     }
 
-    return ExecutionPolicyCreator<Range, TilingIn, ExecutionSpace>(
+    return ExecutionParameters<Range, TilingIn, ExecutionSpace>(
         mRange, t, mExecutionSpace);
   }
 
@@ -232,8 +231,8 @@ public:
     static_assert(std::is_same_v<ExecutionSpace, UnknownExecutionSpace>,
                   "Execution space already set");
 
-    return ExecutionPolicyCreator<Range, Tiling, ExecutionSpaceIn>(mRange,
-                                                                   mTiling, es);
+    return ExecutionParameters<Range, Tiling, ExecutionSpaceIn>(mRange, mTiling,
+                                                                es);
   }
 
   /**
@@ -357,8 +356,8 @@ public:
  * Concept for the execution policy creator.
  */
 template <typename T>
-concept ExecutionPolicyCreatorType =
-    std::same_as<T, typename T::ExecutionPolicyCreatorType>;
+concept ExecutionParametersType =
+    std::same_as<T, typename T::ExecutionParametersType>;
 
 } // namespace polk
 
